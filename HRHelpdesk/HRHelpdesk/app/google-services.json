@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "515427873321",
+    "project_id": "hrhelpdesk-611cb",
+    "storage_bucket": "hrhelpdesk-611cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:515427873321:android:f30b7ce5a5bc3d83c46238",
+        "android_client_info": {
+          "package_name": "com.example.hrhelpdesk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSAeGC1c-NNeuEJyNEskC3GTOCdnQQwSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

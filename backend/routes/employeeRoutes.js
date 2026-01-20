@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { db } = require("../firebaseConfig");
+const { admin, db } = require("../firebaseConfig");
 
 // GET all employees
 router.get("/", async (req, res) => {
@@ -175,14 +175,40 @@ router.put("/:id", async (req, res) => {
     }
 });
 
-// DELETE employee
+// DELETE employee (also deletes Firebase Auth user)
 router.delete("/:id", async (req, res) => {
     try {
         console.log('🗑️ Deleting employee:', req.params.id);
+
+        // Step 1: Get employee data to find authUID
+        const doc = await db.collection('employees').doc(req.params.id).get();
+
+        if (!doc.exists) {
+            return res.status(404).json({ error: "Employee not found" });
+        }
+
+        const employeeData = doc.data();
+        const authUID = employeeData.authUID;
+
+        // Step 2: Delete Firebase Auth user (if exists)
+        if (authUID) {
+            try {
+                await admin.auth().deleteUser(authUID);
+                console.log('✅ Firebase Auth user deleted:', authUID);
+            } catch (authError) {
+                console.warn('⚠️ Auth user not found or already deleted:', authError.message);
+                // Continue with Firestore deletion even if auth deletion fails
+            }
+        }
+
+        // Step 3: Delete Firestore employee document
         await db.collection('employees').doc(req.params.id).delete();
 
         console.log('✅ Employee deleted successfully');
-        res.json({ message: "Employee deleted successfully" });
+        res.json({
+            message: "Employee deleted successfully",
+            deletedAuth: !!authUID
+        });
     } catch (error) {
         console.error("Error deleting employee:", error);
         res.status(500).json({ error: error.message });
