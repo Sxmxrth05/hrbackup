@@ -4,3 +4,7 @@ flask-pymongo==2.3.0
 python-dotenv==1.0.1
 geopy==2.4.1
 PyJWT==2.8.0
+firebase-admin==6.4.0
+pandas==2.2.0
+fpdf==1.7.2
+requests==2.31.0
