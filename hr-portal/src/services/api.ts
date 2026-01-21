@@ -732,10 +732,7 @@ export const payslipsApi = {
     try {
       // Use the pdfUrl from the payslip data
       if (payslipData.pdfUrl) {
-        const url = payslipData.pdfUrl.startsWith('http')
-          ? payslipData.pdfUrl
-          : `http://localhost:5000${payslipData.pdfUrl}`;
-        window.open(url, '_blank');
+        window.open(payslipData.pdfUrl, '_blank');
       } else {
         throw new Error('PDF URL not available');
       }

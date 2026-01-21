@@ -9,7 +9,6 @@ from fpdf import FPDF
 from datetime import datetime
 import calendar
 
-
 class PayrollAgent:
     """
     Production Payroll Agent - Firestore Integration
@@ -261,32 +260,7 @@ class PayrollAgent:
                 pdf.cell(0, 7, line, ln=1)
         
         pdf.output(path)
-        storage_client = storage.Client()
-        bucket_name = "hrmodule-910f7.appspot.com"  # ← CHANGE THIS to your real bucket name!
-        bucket = storage_client.bucket(bucket_name)
-
-        pdf_filename = f"payslip_{emp_id}_{args.month}_{args.year}.pdf"  # or use os.path.basename(path)
-        blob = bucket.blob(f"payslips/{pdf_filename}")
-        blob.upload_from_filename(path)
-
-       # Optional: Make it public (or use signed URL for security)
-      pdf_url = blob.public_url  # or blob.generate_signed_url(expiration=3600 * 24 * 30) for 30 days
-
-      # Save metadata to Firestore
-      db.collection('payslips').add({'employeeId': emp_id,
-     'employeeName': employee_name,
-     'period': f"{args.month}/{args.year}",
-     'basicSalary': basic,
-     'allowances': allowances,
-     'deductions': deductions,
-     'netSalary': net_salary,
-     'status': 'processed',
-     'generatedAt': firestore.SERVER_TIMESTAMP,
-     'pdfUrl': pdf_url
-      })
-
-      print(f"Uploaded payslip for {employee_name} → {pdf_url}")
-    return path
+        return path
 
     def process_payroll(self, year=None, month=None, employee_id=None):
         """
